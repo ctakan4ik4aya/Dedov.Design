@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UX/UI Portfolio | Artur Dedov</title>
-
+    
     <meta name="description" content="Портфолио Артура Дедова - UX/UI дизайнера и full-stack разработчика.">
     <meta name="author" content="Artur Dedov">
     <meta property="og:title" content="UX/UI Portfolio | Artur Dedov">
     <meta property="og:description" content="Создаю интуитивно понятные интерфейсы, оптимизирую пользовательский опыт и разрабатываю архитектуру сервисов.">
     <meta property="og:type" content="website">
-
+    
     <style>
         :root {
             /* Тёмная тема (по умолчанию) */
@@ -21,7 +21,7 @@
             --text-muted: #94a3b8;
             --accent: #818cf8;
             --error: #ef4444;
-            --success: #10b981; /* Добавлен цвет успеха */
+            --success: #10b981;
             --border-color: #334155;
             --input-bg: #0f172a;
         }
@@ -115,8 +115,16 @@
             padding: 0.4rem;
             border-radius: 8px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ДОБАВЛЕНО: Скрываем бургер на десктопе */
+        .burger-btn {
+            display: none; 
+        }
 
         select.lang-select {
             background: var(--card-bg);
@@ -138,6 +146,50 @@
             transition: all 0.3s;
         }
         .btn-small:hover { background-color: var(--primary); color: #fff; }
+
+        /* ДОБАВЛЕНО: Стили для мобильного меню */
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            position: fixed;
+            top: 75px; /* Высота хедера */
+            left: 0;
+            width: 100%;
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 99;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-150%);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .mobile-nav.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+            padding-bottom: 1.5rem;
+        }
+
+        .mobile-nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 1.2rem 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .mobile-nav a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav a:hover {
+            color: var(--primary);
+        }
 
         /* Hero Section */
         .hero { max-width: 1200px; margin: 0 auto 6rem auto; text-align: center; padding-top: 4rem; }
@@ -237,7 +289,7 @@
         .history-item span { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.3rem;}
 
         .admin-badge { background: var(--error); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; display: none; }
-
+        
         /* Footer */
         .site-footer {
             max-width: 1200px;
@@ -263,7 +315,7 @@
             color: var(--primary);
         }
 
-        /* ДОБАВЛЕНО: Стили для Toast уведомлений */
+        /* Стили для Toast уведомлений */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -272,7 +324,7 @@
             flex-direction: column;
             gap: 10px;
             z-index: 10000;
-            pointer-events: none; /* Чтобы не мешали кликать сквозь контейнер */
+            pointer-events: none;
         }
 
         .toast {
@@ -300,20 +352,18 @@
         .toast.error { border-left-color: var(--error); }
         .toast.info { border-left-color: var(--primary); }
 
-        /* Адаптив */
+        /* Адаптив - Обновлено с учетом бургера */
         @media (max-width: 768px) {
             body { padding: 1rem; }
             .hero h1 { font-size: 2.2rem; }
             .projects-grid { grid-template-columns: 1fr; }
+            
+            /* Скрываем десктопное меню, показываем бургер */
             .desktop-nav { display: none; }
+            .burger-btn { display: flex; }
+            
             .about-content { flex-direction: column; text-align: center; }
-            /* Адаптив для Toasts */
-            .toast-container {
-                bottom: 10px;
-                right: 10px;
-                left: 10px;
-                align-items: center;
-            }
+            .toast-container { bottom: 10px; right: 10px; left: 10px; align-items: center; }
             .toast { max-width: 100%; width: 100%; }
         }
     </style>
@@ -335,8 +385,15 @@
                 <option value="en">EN</option>
             </select>
             <button id="headerAuthBtn" class="btn-small" data-i18n="btn_login">Войти</button>
+            <button id="burgerBtn" class="icon-btn burger-btn">☰</button>
         </div>
     </header>
+
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#about" data-i18n="nav_about" onclick="toggleMobileMenu()">Обо мне</a>
+        <a href="#skills" data-i18n="nav_skills" onclick="toggleMobileMenu()">Навыки</a>
+        <a href="#projects" data-i18n="nav_projects" onclick="toggleMobileMenu()">Кейсы</a>
+    </nav>
 
     <section class="hero fade-in-up">
         <h1 data-i18n="hero_title">Проектирование сложных систем</h1>
@@ -351,7 +408,7 @@
                 <p data-i18n="about_p2">Учусь на втором курсе СКУ им. М. Козыбаева по специальности «Информационные системы». Совмещаю базу с практикой: от wireframe-ов в Figma до кода на Python и C++.</p>
                 <p data-i18n="about_p3">Моя страсть — алгоритмы и БД (PostgreSQL, ClickHouse). Верю, что дизайн — это логично выстроенная архитектура.</p>
             </div>
-
+            
             <div class="about-image-container">
                 <img src="image_be609f.png.jpg" alt="Артур Дедов" class="profile-photo">
             </div>
@@ -410,7 +467,7 @@
     <div class="cta-container fade-in-up">
         <button class="btn" id="openActionBtn" data-i18n="btn_discuss">Оставить заявку</button>
     </div>
-
+    
     <footer class="site-footer fade-in-up">
         <p>&copy; 2026 Artur Dedov. Проектирование и разработка.</p>
         <div class="footer-links">
@@ -492,28 +549,41 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script>
-        // ДОБАВЛЕНО: Функция для вызова кастомных уведомлений
+        // ДОБАВЛЕНО: Логика бургер-меню
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        function toggleMobileMenu() {
+            mobileNav.classList.toggle('active');
+            // Меняем иконку бургера на крестик и обратно
+            if (mobileNav.classList.contains('active')) {
+                burgerBtn.innerText = '✕';
+            } else {
+                burgerBtn.innerText = '☰';
+            }
+        }
+
+        burgerBtn.addEventListener('click', toggleMobileMenu);
+
+        // Функция для вызова кастомных уведомлений
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
-
+            
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = message;
-
+            
             container.appendChild(toast);
-
-            // Запускаем анимацию появления с небольшой задержкой (чтобы CSS успел подхватить элемент)
+            
             setTimeout(() => {
                 toast.classList.add('show');
             }, 10);
-
-            // Удаляем уведомление через 3.5 секунды
+            
             setTimeout(() => {
                 toast.classList.remove('show');
-                // Ждем окончания анимации исчезновения перед удалением из DOM
                 setTimeout(() => {
                     toast.remove();
-                }, 400);
+                }, 400); 
             }, 3500);
         }
 
@@ -574,24 +644,24 @@
             let isValid = true;
             if (!validateEmail(email)) { document.getElementById('regEmailError').style.display = 'block'; isValid = false; } else { document.getElementById('regEmailError').style.display = 'none'; }
             if (phone.length !== 11) { document.getElementById('regPhoneError').style.display = 'block'; isValid = false; } else { document.getElementById('regPhoneError').style.display = 'none'; }
-
-            if (!name || !surname) {
-                showToast(i18n[currentLang].err_fill_name || "Заполните имя и фамилию", "error"); // ЗАМЕНЕНО
-                isValid = false;
+            
+            if (!name || !surname) { 
+                showToast(i18n[currentLang].err_fill_name || "Заполните имя и фамилию", "error"); 
+                isValid = false; 
             }
 
             if (!isValid) return;
 
             let users = JSON.parse(localStorage.getItem('appUsers'));
             if (users[email]) {
-                showToast(i18n[currentLang].err_user_exists || "Пользователь с таким email уже существует!", "error"); // ЗАМЕНЕНО
+                showToast(i18n[currentLang].err_user_exists || "Пользователь с таким email уже существует!", "error"); 
                 return;
             }
 
             users[email] = { name, surname, email, phone, role: "user", history: [] };
             localStorage.setItem('appUsers', JSON.stringify(users));
-
-            showToast(i18n[currentLang].msg_reg_success || "Регистрация успешна! Теперь вы можете войти.", "success"); // ЗАМЕНЕНО
+            
+            showToast(i18n[currentLang].msg_reg_success || "Регистрация успешна! Теперь вы можете войти.", "success"); 
             switchTab('login');
         }
 
@@ -606,10 +676,10 @@
                 document.getElementById('loginError').style.display = 'none';
                 closeModals();
                 updateUIState();
-
-                showToast(i18n[currentLang].msg_login_success || `С возвращением, ${currentUser.name}!`, "success"); // ДОБАВЛЕНО УВЕДОМЛЕНИЕ О ВХОДЕ
-
-                openCabinet();
+                
+                showToast(i18n[currentLang].msg_login_success || `С возвращением, ${currentUser.name}!`, "success"); 
+                
+                openCabinet(); 
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
@@ -620,7 +690,7 @@
             sessionStorage.removeItem('currentUser');
             closeModals();
             updateUIState();
-            showToast(i18n[currentLang].msg_logout || "Вы вышли из аккаунта", "info"); // ДОБАВЛЕНО УВЕДОМЛЕНИЕ О ВЫХОДЕ
+            showToast(i18n[currentLang].msg_logout || "Вы вышли из аккаунта", "info"); 
         }
 
         // ==========================================
@@ -639,7 +709,7 @@
 
             if (currentUser.role === 'admin') {
                 adminBadge.style.display = 'inline-block';
-                reqBlock.style.display = 'none';
+                reqBlock.style.display = 'none'; 
 
                 let allRequests = [];
                 for (let key in users) {
@@ -680,7 +750,7 @@
         function submitRequest() {
             const text = document.getElementById('requestText').value.trim();
             if(!text) {
-                showToast("Введите текст запроса", "error"); // ЗАМЕНЕНО
+                showToast("Введите текст запроса", "error"); 
                 return;
             }
 
@@ -694,8 +764,8 @@
             sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
 
             document.getElementById('requestText').value = '';
-            showToast("Запрос успешно отправлен!", "success"); // ЗАМЕНЕНО
-            openCabinet();
+            showToast("Запрос успешно отправлен!", "success"); 
+            openCabinet(); 
         }
 
         // ==========================================
@@ -751,8 +821,7 @@
                 tab_login: "Вход", tab_register: "Регистрация",
                 label_email: "Email", label_phone: "Телефон (без +)", label_name: "Имя", label_surname: "Фамилия",
                 cabinet_title: "Личный кабинет", cabinet_new_req: "Новый запрос", cabinet_history: "История запросов",
-
-                // Добавлены переводы для уведомлений
+                
                 err_fill_name: "Заполните имя и фамилию",
                 err_user_exists: "Пользователь с таким email уже существует!",
                 msg_reg_success: "Регистрация успешна! Теперь вы можете войти.",
@@ -773,7 +842,7 @@
                 tab_login: "Log in", tab_register: "Sign up",
                 label_email: "Email", label_phone: "Phone (digits only)", label_name: "Name", label_surname: "Surname",
                 cabinet_title: "Dashboard", cabinet_new_req: "New Request", cabinet_history: "Request History",
-
+                
                 err_fill_name: "Please fill in name and surname",
                 err_user_exists: "User with this email already exists!",
                 msg_reg_success: "Registration successful! You can now log in.",
@@ -794,7 +863,7 @@
                 tab_login: "Кіру", tab_register: "Тіркелу",
                 label_email: "Эл. пошта", label_phone: "Телефон (тек сандар)", label_name: "Аты", label_surname: "Тегі",
                 cabinet_title: "Жеке кабинет", cabinet_new_req: "Жаңа өтініш", cabinet_history: "Өтініштер тарихы",
-
+                
                 err_fill_name: "Аты мен тегін толтырыңыз",
                 err_user_exists: "Бұл электрондық поштасы бар пайдаланушы тіркелген!",
                 msg_reg_success: "Тіркеу сәтті өтті! Енді жүйеге кіре аласыз.",
