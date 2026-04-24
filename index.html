@@ -21,6 +21,7 @@
             --text-muted: #94a3b8;
             --accent: #818cf8;
             --error: #ef4444;
+            --success: #10b981; /* Добавлен цвет успеха */
             --border-color: #334155;
             --input-bg: #0f172a;
         }
@@ -34,6 +35,7 @@
             --text-muted: #475569;
             --accent: #4f46e5;
             --error: #dc2626;
+            --success: #059669;
             --border-color: #cbd5e1;
             --input-bg: #f1f5f9;
         }
@@ -143,18 +145,18 @@
         .hero p { color: var(--text-muted); font-size: 1.25rem; max-width: 700px; margin: 0 auto; }
         .section-title { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; color: var(--text-main); }
 
-        /* About Section - Обновлено */
+        /* About Section */
         .about-content {
             display: flex;
-            align-items: center; /* Центрирует текст и фото по вертикали */
+            align-items: center;
             justify-content: space-between;
-            gap: 40px; /* Расстояние между текстом и фото */
+            gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .about-text {
-            flex: 1; /* Текст занимает свободное место */
+            flex: 1;
         }
 
         .about-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; }
@@ -168,12 +170,12 @@
 
         .profile-photo {
             width: 100%;
-            max-width: 450px; /* Ограничиваем максимальную ширину фото */
+            max-width: 450px;
             height: auto;
-            aspect-ratio: 3 / 4; /* Сохраняем пропорции как на макете */
+            aspect-ratio: 3 / 4;
             object-fit: cover;
-            border-radius: 24px; /* Скругляем углы для более современного вида */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* Добавляем глубины */
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         /* Skills Section */
@@ -236,7 +238,7 @@
 
         .admin-badge { background: var(--error); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; display: none; }
 
-        /* ДОБАВЛЕНО: Стили для подвала сайта (Footer) */
+        /* Footer */
         .site-footer {
             max-width: 1200px;
             margin: 4rem auto 0 auto;
@@ -261,18 +263,58 @@
             color: var(--primary);
         }
 
-        /* Адаптив - Обновлено */
+        /* ДОБАВЛЕНО: Стили для Toast уведомлений */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10000;
+            pointer-events: none; /* Чтобы не мешали кликать сквозь контейнер */
+        }
+
+        .toast {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease;
+            pointer-events: all;
+            min-width: 250px;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--error); }
+        .toast.info { border-left-color: var(--primary); }
+
+        /* Адаптив */
         @media (max-width: 768px) {
             body { padding: 1rem; }
             .hero h1 { font-size: 2.2rem; }
             .projects-grid { grid-template-columns: 1fr; }
             .desktop-nav { display: none; }
-
-            /* Для мобилок — ставим фото под текст */
-            .about-content {
-                flex-direction: column;
-                text-align: center;
+            .about-content { flex-direction: column; text-align: center; }
+            /* Адаптив для Toasts */
+            .toast-container {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                align-items: center;
             }
+            .toast { max-width: 100%; width: 100%; }
         }
     </style>
 </head>
@@ -447,7 +489,34 @@
         </div>
     </div>
 
+    <div id="toastContainer" class="toast-container"></div>
+
     <script>
+        // ДОБАВЛЕНО: Функция для вызова кастомных уведомлений
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = message;
+
+            container.appendChild(toast);
+
+            // Запускаем анимацию появления с небольшой задержкой (чтобы CSS успел подхватить элемент)
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Удаляем уведомление через 3.5 секунды
+            setTimeout(() => {
+                toast.classList.remove('show');
+                // Ждем окончания анимации исчезновения перед удалением из DOM
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3500);
+        }
+
         // Анимации баров при скролле
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -464,7 +533,6 @@
         // ==========================================
         // СИСТЕМА ДАННЫХ (LOCAL STORAGE)
         // ==========================================
-        // Инициализируем БД в браузере, если её нет + создаем дефолтного админа
         if (!localStorage.getItem('appUsers')) {
             const initialDB = {
                 "admin@admin.kz": {
@@ -506,19 +574,24 @@
             let isValid = true;
             if (!validateEmail(email)) { document.getElementById('regEmailError').style.display = 'block'; isValid = false; } else { document.getElementById('regEmailError').style.display = 'none'; }
             if (phone.length !== 11) { document.getElementById('regPhoneError').style.display = 'block'; isValid = false; } else { document.getElementById('regPhoneError').style.display = 'none'; }
-            if (!name || !surname) { alert("Заполните имя и фамилию"); isValid = false; }
+
+            if (!name || !surname) {
+                showToast(i18n[currentLang].err_fill_name || "Заполните имя и фамилию", "error"); // ЗАМЕНЕНО
+                isValid = false;
+            }
 
             if (!isValid) return;
 
             let users = JSON.parse(localStorage.getItem('appUsers'));
             if (users[email]) {
-                alert("Пользователь с таким email уже существует!");
+                showToast(i18n[currentLang].err_user_exists || "Пользователь с таким email уже существует!", "error"); // ЗАМЕНЕНО
                 return;
             }
 
             users[email] = { name, surname, email, phone, role: "user", history: [] };
             localStorage.setItem('appUsers', JSON.stringify(users));
-            alert("Регистрация успешна! Теперь вы можете войти.");
+
+            showToast(i18n[currentLang].msg_reg_success || "Регистрация успешна! Теперь вы можете войти.", "success"); // ЗАМЕНЕНО
             switchTab('login');
         }
 
@@ -533,7 +606,10 @@
                 document.getElementById('loginError').style.display = 'none';
                 closeModals();
                 updateUIState();
-                openCabinet(); // Сразу открываем кабинет после входа
+
+                showToast(i18n[currentLang].msg_login_success || `С возвращением, ${currentUser.name}!`, "success"); // ДОБАВЛЕНО УВЕДОМЛЕНИЕ О ВХОДЕ
+
+                openCabinet();
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
@@ -544,6 +620,7 @@
             sessionStorage.removeItem('currentUser');
             closeModals();
             updateUIState();
+            showToast(i18n[currentLang].msg_logout || "Вы вышли из аккаунта", "info"); // ДОБАВЛЕНО УВЕДОМЛЕНИЕ О ВЫХОДЕ
         }
 
         // ==========================================
@@ -562,9 +639,8 @@
 
             if (currentUser.role === 'admin') {
                 adminBadge.style.display = 'inline-block';
-                reqBlock.style.display = 'none'; // Админ не оставляет заявки, он их читает
+                reqBlock.style.display = 'none';
 
-                // Админ видит заявки ВСЕХ пользователей
                 let allRequests = [];
                 for (let key in users) {
                     if (users[key].history) {
@@ -576,7 +652,6 @@
 
                 if(allRequests.length === 0) historyList.innerHTML = '<p>Нет новых заявок в системе.</p>';
 
-                // Сортируем по дате (новые сверху)
                 allRequests.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(req => {
                     historyList.innerHTML += `
                         <div class="history-item" style="border-left: 4px solid var(--error);">
@@ -589,11 +664,9 @@
                 adminBadge.style.display = 'none';
                 reqBlock.style.display = 'block';
 
-                // Обычный юзер видит только свои
                 const myHistory = users[currentUser.email].history || [];
                 if(myHistory.length === 0) historyList.innerHTML = '<p>Вы еще не отправляли заявок.</p>';
 
-                // Новые сверху
                 [...myHistory].reverse().forEach(req => {
                     historyList.innerHTML += `
                         <div class="history-item">
@@ -606,7 +679,10 @@
 
         function submitRequest() {
             const text = document.getElementById('requestText').value.trim();
-            if(!text) return;
+            if(!text) {
+                showToast("Введите текст запроса", "error"); // ЗАМЕНЕНО
+                return;
+            }
 
             let users = JSON.parse(localStorage.getItem('appUsers'));
             const dateStr = new Date().toLocaleString('ru-RU');
@@ -614,12 +690,12 @@
             users[currentUser.email].history.push({ date: dateStr, text: text });
             localStorage.setItem('appUsers', JSON.stringify(users));
 
-            // Обновляем текущую сессию
             currentUser.history = users[currentUser.email].history;
             sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
 
             document.getElementById('requestText').value = '';
-            openCabinet(); // Перерисовка истории
+            showToast("Запрос успешно отправлен!", "success"); // ЗАМЕНЕНО
+            openCabinet();
         }
 
         // ==========================================
@@ -674,7 +750,14 @@
                 btn_discuss: "Оставить заявку", btn_send: "Отправить", btn_logout: "Выйти из аккаунта",
                 tab_login: "Вход", tab_register: "Регистрация",
                 label_email: "Email", label_phone: "Телефон (без +)", label_name: "Имя", label_surname: "Фамилия",
-                cabinet_title: "Личный кабинет", cabinet_new_req: "Новый запрос", cabinet_history: "История запросов"
+                cabinet_title: "Личный кабинет", cabinet_new_req: "Новый запрос", cabinet_history: "История запросов",
+
+                // Добавлены переводы для уведомлений
+                err_fill_name: "Заполните имя и фамилию",
+                err_user_exists: "Пользователь с таким email уже существует!",
+                msg_reg_success: "Регистрация успешна! Теперь вы можете войти.",
+                msg_login_success: "Вход выполнен успешно!",
+                msg_logout: "Вы вышли из аккаунта"
             },
             en: {
                 nav_about: "About", nav_skills: "Skills", nav_projects: "Cases", btn_login: "Login", cabinet: "Dashboard",
@@ -689,7 +772,13 @@
                 btn_discuss: "Send Request", btn_send: "Send", btn_logout: "Logout",
                 tab_login: "Log in", tab_register: "Sign up",
                 label_email: "Email", label_phone: "Phone (digits only)", label_name: "Name", label_surname: "Surname",
-                cabinet_title: "Dashboard", cabinet_new_req: "New Request", cabinet_history: "Request History"
+                cabinet_title: "Dashboard", cabinet_new_req: "New Request", cabinet_history: "Request History",
+
+                err_fill_name: "Please fill in name and surname",
+                err_user_exists: "User with this email already exists!",
+                msg_reg_success: "Registration successful! You can now log in.",
+                msg_login_success: "Successfully logged in!",
+                msg_logout: "You have been logged out"
             },
             kk: {
                 nav_about: "Мен туралы", nav_skills: "Дағдылар", nav_projects: "Жобалар", btn_login: "Кіру", cabinet: "Кабинет",
@@ -704,7 +793,13 @@
                 btn_discuss: "Өтініш қалдыру", btn_send: "Жіберу", btn_logout: "Шығу",
                 tab_login: "Кіру", tab_register: "Тіркелу",
                 label_email: "Эл. пошта", label_phone: "Телефон (тек сандар)", label_name: "Аты", label_surname: "Тегі",
-                cabinet_title: "Жеке кабинет", cabinet_new_req: "Жаңа өтініш", cabinet_history: "Өтініштер тарихы"
+                cabinet_title: "Жеке кабинет", cabinet_new_req: "Жаңа өтініш", cabinet_history: "Өтініштер тарихы",
+
+                err_fill_name: "Аты мен тегін толтырыңыз",
+                err_user_exists: "Бұл электрондық поштасы бар пайдаланушы тіркелген!",
+                msg_reg_success: "Тіркеу сәтті өтті! Енді жүйеге кіре аласыз.",
+                msg_login_success: "Жүйеге сәтті кірдіңіз!",
+                msg_logout: "Сіз жүйеден шықтыңыз"
             }
         };
 
@@ -717,7 +812,7 @@
                 const key = el.getAttribute('data-i18n');
                 if (i18n[currentLang][key]) el.innerHTML = i18n[currentLang][key];
             });
-            updateUIState(); // Обновить кнопки авторизации
+            updateUIState();
         });
 
         // Инит
