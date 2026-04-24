@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Portfolio | Artur Dedov</title>
+
+    <meta name="description" content="Портфолио Артура Дедова - UX/UI дизайнера и full-stack разработчика.">
+    <meta name="author" content="Artur Dedov">
+    <meta property="og:title" content="UX/UI Portfolio | Artur Dedov">
+    <meta property="og:description" content="Создаю интуитивно понятные интерфейсы, оптимизирую пользовательский опыт и разрабатываю архитектуру сервисов.">
+    <meta property="og:type" content="website">
+
+    <style>
+        :root {
+            /* Тёмная тема (по умолчанию) */
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #818cf8;
+            --error: #ef4444;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+        }
+
+        /* Светлая тема */
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #4f46e5;
+            --error: #dc2626;
+            --border-color: #cbd5e1;
+            --input-bg: #f1f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        section {
+            scroll-margin-top: 5rem;
+            margin-bottom: 8rem;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 4rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            opacity: 0.95;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .desktop-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .desktop-nav a:hover { color: var(--primary); }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* Элементы управления (Тема, Язык) */
+        .icon-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.4rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        select.lang-select {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-small {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-small:hover { background-color: var(--primary); color: #fff; }
+
+        /* Hero Section */
+        .hero { max-width: 1200px; margin: 0 auto 6rem auto; text-align: center; padding-top: 4rem; }
+        .hero h1 { font-size: 4rem; margin-bottom: 1.5rem; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+        .hero p { color: var(--text-muted); font-size: 1.25rem; max-width: 700px; margin: 0 auto; }
+        .section-title { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; color: var(--text-main); }
+
+        /* About Section - Обновлено */
+        .about-content {
+            display: flex;
+            align-items: center; /* Центрирует текст и фото по вертикали */
+            justify-content: space-between;
+            gap: 40px; /* Расстояние между текстом и фото */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            flex: 1; /* Текст занимает свободное место */
+        }
+
+        .about-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .about-text strong { color: var(--primary); }
+
+        .about-image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-photo {
+            width: 100%;
+            max-width: 450px; /* Ограничиваем максимальную ширину фото */
+            height: auto;
+            aspect-ratio: 3 / 4; /* Сохраняем пропорции как на макете */
+            object-fit: cover;
+            border-radius: 24px; /* Скругляем углы для более современного вида */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* Добавляем глубины */
+        }
+
+        /* Skills Section */
+        .skills-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .skill-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; transition: transform 0.3s ease; }
+        .skill-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .skill-icon { font-size: 2rem; margin-bottom: 1rem; color: var(--primary); }
+        .skill-card h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skill-tag { background: var(--bg-color); color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.85rem; border: 1px solid var(--border-color); }
+
+        /* Projects Section */
+        .projects-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+        .card { background-color: var(--card-bg); border-radius: 16px; padding: 2rem; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
+        .card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .tags { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .tag { background-color: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+
+        .dashboard-mockup { background-color: var(--bg-color); border-radius: 8px; padding: 1rem; margin-top: 1.5rem; border: 1px solid var(--border-color); }
+        .dash-header { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted); }
+        .stat-row { display: flex; align-items: center; margin-bottom: 0.8rem; gap: 1rem; }
+        .stat-label { width: 100px; font-size: 0.85rem; }
+        .stat-bar-container { flex-grow: 1; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+        .stat-bar { height: 100%; background: var(--primary); width: 0%; transition: width 1.5s ease-out; }
+        .stat-val { font-size: 0.85rem; font-weight: bold; width: 40px; text-align: right; }
+
+        /* Buttons */
+        .cta-container { text-align: center; margin-top: 2rem; padding-bottom: 5rem; }
+        .btn { background-color: var(--primary); color: #fff; padding: 1rem 2.5rem; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: inline-flex; justify-content: center; align-items: center; }
+        .btn:hover { background-color: var(--accent); transform: scale(1.05); }
+        .btn:disabled { background-color: var(--text-muted); cursor: not-allowed; transform: none; }
+
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 1000; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-box { background: var(--card-bg); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border-color); width: 90%; max-width: 450px; transform: translateY(-20px); transition: transform 0.3s; position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay.active .modal-box { transform: translateY(0); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        .close-btn:hover { color: var(--text-main); }
+
+        .form-group { margin-bottom: 16px; display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;}
+        .form-group input, .form-group textarea { background: var(--input-bg); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 8px; color: var(--text-main); font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+
+        .input-error { border-color: var(--error) !important; }
+        .error-text { color: var(--error); font-size: 0.8rem; margin-top: 0.3rem; display: none; }
+
+        .tabs { display: flex; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .tab { flex: 1; text-align: center; padding: 0.5rem; cursor: pointer; color: var(--text-muted); transition: color 0.3s; }
+        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); font-weight: bold; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Личный кабинет */
+        .history-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        .history-item { background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; }
+        .history-item span { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.3rem;}
+
+        .admin-badge { background: var(--error); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; display: none; }
+
+        /* ДОБАВЛЕНО: Стили для подвала сайта (Footer) */
+        .site-footer {
+            max-width: 1200px;
+            margin: 4rem auto 0 auto;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+        .footer-links {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Адаптив - Обновлено */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .desktop-nav { display: none; }
+
+            /* Для мобилок — ставим фото под текст */
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="fade-in-up">
+        <h2>Dedov.Design</h2>
+        <nav class="desktop-nav">
+            <a href="#about" data-i18n="nav_about">Обо мне</a>
+            <a href="#skills" data-i18n="nav_skills">Навыки</a>
+            <a href="#projects" data-i18n="nav_projects">Кейсы</a>
+        </nav>
+        <div class="header-controls">
+            <button id="themeToggle" class="icon-btn" title="Сменить тему">☀️</button>
+            <select id="langSelect" class="lang-select">
+                <option value="ru">RU</option>
+                <option value="kk">KK</option>
+                <option value="en">EN</option>
+            </select>
+            <button id="headerAuthBtn" class="btn-small" data-i18n="btn_login">Войти</button>
+        </div>
+    </header>
+
+    <section class="hero fade-in-up">
+        <h1 data-i18n="hero_title">Проектирование сложных систем</h1>
+        <p data-i18n="hero_subtitle">Создаю интуитивно понятные интерфейсы, оптимизирую пользовательский опыт и разрабатываю архитектуру высоконагруженных сервисов.</p>
+    </section>
+
+    <section id="about" class="about-section fade-in-up">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left;" data-i18n="nav_about">Обо мне</h2>
+                <p data-i18n="about_p1">Привет! Меня зовут <strong>Артур Дедов</strong>. Я UX/UI дизайнер и full-stack разработчик из Петропавловска.</p>
+                <p data-i18n="about_p2">Учусь на втором курсе СКУ им. М. Козыбаева по специальности «Информационные системы». Совмещаю базу с практикой: от wireframe-ов в Figma до кода на Python и C++.</p>
+                <p data-i18n="about_p3">Моя страсть — алгоритмы и БД (PostgreSQL, ClickHouse). Верю, что дизайн — это логично выстроенная архитектура.</p>
+            </div>
+
+            <div class="about-image-container">
+                <img src="image_be609f.png.jpg" alt="Артур Дедов" class="profile-photo">
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="fade-in-up">
+        <h2 class="section-title" data-i18n="nav_skills">Компетенции</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🎨</div>
+                <h3 data-i18n="skill_design">UX/UI Дизайн</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Figma</span><span class="skill-tag">Wireframing</span><span class="skill-tag">Prototyping</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">💻</div>
+                <h3 data-i18n="skill_dev">Разработка</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">C++</span><span class="skill-tag">Python</span><span class="skill-tag">HTML/CSS/JS</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">⚙️</div>
+                <h3 data-i18n="skill_db">Архитектура & БД</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">PostgreSQL</span><span class="skill-tag">ClickHouse</span><span class="skill-tag">Алгоритмы</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title fade-in-up" data-i18n="nav_projects">Кейсы</h2>
+        <div class="projects-grid">
+            <div class="card fade-in-up">
+                <h3>iClean Petropavl</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;" data-i18n="proj_iclean">Интерфейс сервиса клининговых услуг с калькулятором стоимости и мультиязычной поддержкой.</p>
+                <div class="dashboard-mockup">
+                    <div class="dash-header"><span data-i18n="stat_conversion">Аналитика конверсии</span><span>+24%</span></div>
+                    <div class="stat-row"><span class="stat-label">Заявки</span><div class="stat-bar-container"><div class="stat-bar" data-width="85%"></div></div></div>
+                </div>
+            </div>
+            <div class="card fade-in-up">
+                <h3>Портал «Наш Двор»</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;" data-i18n="proj_yard">Редизайн системы городского благоустройства. Интеграция интерактивных карт (Leaflet.js).</p>
+                <div class="dashboard-mockup">
+                    <div class="dash-header"><span data-i18n="stat_status">Статус обращений</span><span>Сегодня</span></div>
+                    <div class="stat-row"><span class="stat-label">Решено</span><div class="stat-bar-container"><div class="stat-bar" data-width="70%" style="background: #10b981;"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="cta-container fade-in-up">
+        <button class="btn" id="openActionBtn" data-i18n="btn_discuss">Оставить заявку</button>
+    </div>
+
+    <footer class="site-footer fade-in-up">
+        <p>&copy; 2026 Artur Dedov. Проектирование и разработка.</p>
+        <div class="footer-links">
+            <a href="#" target="_blank">Telegram</a>
+            <a href="#" target="_blank">GitHub</a>
+            <a href="#" target="_blank">Figma</a>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModals()">&times;</span>
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')" data-i18n="tab_login">Вход</div>
+                <div class="tab" onclick="switchTab('register')" data-i18n="tab_register">Регистрация</div>
+            </div>
+
+            <div id="loginTab" class="tab-content active">
+                <div class="form-group">
+                    <label data-i18n="label_email">Email</label>
+                    <input type="email" id="loginEmail" placeholder="admin@admin.kz (для теста админа)">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_phone">Телефон (без +)</label>
+                    <input type="tel" id="loginPhone" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="77777777777">
+                </div>
+                <div class="error-text" id="loginError">Неверные данные или пользователь не найден</div>
+                <button class="btn" style="width: 100%;" onclick="loginUser()" data-i18n="btn_login">Войти</button>
+            </div>
+
+            <div id="registerTab" class="tab-content">
+                <div class="form-group">
+                    <label data-i18n="label_name">Имя</label>
+                    <input type="text" id="regName">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_surname">Фамилия</label>
+                    <input type="text" id="regSurname">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_email">Email</label>
+                    <input type="email" id="regEmail">
+                    <div class="error-text" id="regEmailError">Некорректный email</div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_phone">Телефон (11 цифр)</label>
+                    <input type="tel" id="regPhone" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="error-text" id="regPhoneError">Телефон должен содержать 11 цифр</div>
+                </div>
+                <button class="btn" style="width: 100%;" onclick="registerUser()" data-i18n="tab_register">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cabinetModal">
+        <div class="modal-box" style="max-width: 600px;">
+            <span class="close-btn" onclick="closeModals()">&times;</span>
+            <h2><span data-i18n="cabinet_title">Личный кабинет</span> <span id="adminBadge" class="admin-badge">ADMIN</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;" id="cabinetUserInfo"></p>
+
+            <div id="newRequestBlock">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;" data-i18n="cabinet_new_req">Новый запрос</h3>
+                <div class="form-group">
+                    <textarea id="requestText" rows="3" placeholder="Опишите задачу..."></textarea>
+                </div>
+                <button class="btn" onclick="submitRequest()" data-i18n="btn_send">Отправить</button>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h3 style="font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;" data-i18n="cabinet_history">История запросов</h3>
+                <div class="history-list" id="historyList">
+                    </div>
+            </div>
+
+            <button class="btn-small" style="margin-top: 2rem; border-color: var(--error); color: var(--error);" onclick="logout()" data-i18n="btn_logout">Выйти из аккаунта</button>
+        </div>
+    </div>
+
+    <script>
+        // Анимации баров при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.querySelectorAll('.stat-bar').forEach(bar => {
+                        bar.style.width = bar.getAttribute('data-width');
+                    });
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+        // ==========================================
+        // СИСТЕМА ДАННЫХ (LOCAL STORAGE)
+        // ==========================================
+        // Инициализируем БД в браузере, если её нет + создаем дефолтного админа
+        if (!localStorage.getItem('appUsers')) {
+            const initialDB = {
+                "admin@admin.kz": {
+                    name: "Администратор", surname: "Системы", email: "admin@admin.kz", phone: "77777777777", role: "admin", history: []
+                }
+            };
+            localStorage.setItem('appUsers', JSON.stringify(initialDB));
+        }
+
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
+
+        function updateUIState() {
+            const headerBtn = document.getElementById('headerAuthBtn');
+            const actionBtn = document.getElementById('openActionBtn');
+            if (currentUser) {
+                headerBtn.innerText = i18n[currentLang].cabinet || "Кабинет";
+                headerBtn.onclick = openCabinet;
+                actionBtn.innerText = i18n[currentLang].btn_discuss || "Оставить заявку";
+                actionBtn.onclick = openCabinet;
+            } else {
+                headerBtn.innerText = i18n[currentLang].btn_login || "Войти";
+                headerBtn.onclick = () => { document.getElementById('authModal').classList.add('active'); };
+                actionBtn.innerText = i18n[currentLang].btn_discuss || "Оставить заявку";
+                actionBtn.onclick = () => { document.getElementById('authModal').classList.add('active'); };
+            }
+        }
+
+        // ==========================================
+        // АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ
+        // ==========================================
+        function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+        function registerUser() {
+            const name = document.getElementById('regName').value.trim();
+            const surname = document.getElementById('regSurname').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+
+            let isValid = true;
+            if (!validateEmail(email)) { document.getElementById('regEmailError').style.display = 'block'; isValid = false; } else { document.getElementById('regEmailError').style.display = 'none'; }
+            if (phone.length !== 11) { document.getElementById('regPhoneError').style.display = 'block'; isValid = false; } else { document.getElementById('regPhoneError').style.display = 'none'; }
+            if (!name || !surname) { alert("Заполните имя и фамилию"); isValid = false; }
+
+            if (!isValid) return;
+
+            let users = JSON.parse(localStorage.getItem('appUsers'));
+            if (users[email]) {
+                alert("Пользователь с таким email уже существует!");
+                return;
+            }
+
+            users[email] = { name, surname, email, phone, role: "user", history: [] };
+            localStorage.setItem('appUsers', JSON.stringify(users));
+            alert("Регистрация успешна! Теперь вы можете войти.");
+            switchTab('login');
+        }
+
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
+            let users = JSON.parse(localStorage.getItem('appUsers'));
+
+            if (users[email] && users[email].phone === phone) {
+                currentUser = users[email];
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                document.getElementById('loginError').style.display = 'none';
+                closeModals();
+                updateUIState();
+                openCabinet(); // Сразу открываем кабинет после входа
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            sessionStorage.removeItem('currentUser');
+            closeModals();
+            updateUIState();
+        }
+
+        // ==========================================
+        // ЛИЧНЫЙ КАБИНЕТ И ИСТОРИЯ (АДМИН/ЮЗЕР)
+        // ==========================================
+        function openCabinet() {
+            document.getElementById('cabinetModal').classList.add('active');
+            document.getElementById('cabinetUserInfo').innerText = `${currentUser.name} ${currentUser.surname} (${currentUser.email})`;
+
+            const adminBadge = document.getElementById('adminBadge');
+            const reqBlock = document.getElementById('newRequestBlock');
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            let users = JSON.parse(localStorage.getItem('appUsers'));
+
+            if (currentUser.role === 'admin') {
+                adminBadge.style.display = 'inline-block';
+                reqBlock.style.display = 'none'; // Админ не оставляет заявки, он их читает
+
+                // Админ видит заявки ВСЕХ пользователей
+                let allRequests = [];
+                for (let key in users) {
+                    if (users[key].history) {
+                        users[key].history.forEach(req => {
+                            allRequests.push({ ...req, ownerInfo: `${users[key].name} (${users[key].phone})` });
+                        });
+                    }
+                }
+
+                if(allRequests.length === 0) historyList.innerHTML = '<p>Нет новых заявок в системе.</p>';
+
+                // Сортируем по дате (новые сверху)
+                allRequests.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(req => {
+                    historyList.innerHTML += `
+                        <div class="history-item" style="border-left: 4px solid var(--error);">
+                            <span>От: ${req.ownerInfo} | Дата: ${req.date}</span>
+                            ${req.text}
+                        </div>`;
+                });
+
+            } else {
+                adminBadge.style.display = 'none';
+                reqBlock.style.display = 'block';
+
+                // Обычный юзер видит только свои
+                const myHistory = users[currentUser.email].history || [];
+                if(myHistory.length === 0) historyList.innerHTML = '<p>Вы еще не отправляли заявок.</p>';
+
+                // Новые сверху
+                [...myHistory].reverse().forEach(req => {
+                    historyList.innerHTML += `
+                        <div class="history-item">
+                            <span>Дата: ${req.date}</span>
+                            ${req.text}
+                        </div>`;
+                });
+            }
+        }
+
+        function submitRequest() {
+            const text = document.getElementById('requestText').value.trim();
+            if(!text) return;
+
+            let users = JSON.parse(localStorage.getItem('appUsers'));
+            const dateStr = new Date().toLocaleString('ru-RU');
+
+            users[currentUser.email].history.push({ date: dateStr, text: text });
+            localStorage.setItem('appUsers', JSON.stringify(users));
+
+            // Обновляем текущую сессию
+            currentUser.history = users[currentUser.email].history;
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            document.getElementById('requestText').value = '';
+            openCabinet(); // Перерисовка истории
+        }
+
+        // ==========================================
+        // UI УПРАВЛЕНИЕ (ВКЛАДКИ, МОДАЛКИ)
+        // ==========================================
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if(tab === 'login') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        function closeModals() {
+            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('cabinetModal').classList.remove('active');
+        }
+
+        // ==========================================
+        // ТЕМНАЯ / СВЕТЛАЯ ТЕМА
+        // ==========================================
+        const themeToggle = document.getElementById('themeToggle');
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        if(currentTheme === 'light') document.body.setAttribute('data-theme', 'light');
+
+        themeToggle.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', currentTheme === 'light' ? 'light' : '');
+            localStorage.setItem('theme', currentTheme);
+            themeToggle.innerText = currentTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        // ==========================================
+        // МУЛЬТИЯЗЫЧНОСТЬ (i18n)
+        // ==========================================
+        const i18n = {
+            ru: {
+                nav_about: "Обо мне", nav_skills: "Навыки", nav_projects: "Кейсы", btn_login: "Войти", cabinet: "Кабинет",
+                hero_title: "Проектирование сложных систем", hero_subtitle: "Создаю интуитивно понятные интерфейсы, оптимизирую пользовательский опыт и разрабатываю архитектуру высоконагруженных сервисов.",
+                about_p1: "Привет! Меня зовут <strong>Артур Дедов</strong>. Я UX/UI дизайнер и full-stack разработчик из Петропавловска.",
+                about_p2: "Учусь на втором курсе СКУ им. М. Козыбаева. Совмещаю базу с практикой: от wireframe-ов в Figma до кода на Python и C++.",
+                about_p3: "Моя страсть — алгоритмы и БД. Верю, что дизайн — это логично выстроенная архитектура.",
+                skill_design: "UX/UI Дизайн", skill_dev: "Разработка", skill_db: "Архитектура & БД",
+                proj_iclean: "Интерфейс сервиса клининговых услуг с калькулятором стоимости.",
+                proj_yard: "Редизайн системы городского благоустройства. Интеграция карт.",
+                stat_conversion: "Аналитика конверсии", stat_status: "Статус обращений",
+                btn_discuss: "Оставить заявку", btn_send: "Отправить", btn_logout: "Выйти из аккаунта",
+                tab_login: "Вход", tab_register: "Регистрация",
+                label_email: "Email", label_phone: "Телефон (без +)", label_name: "Имя", label_surname: "Фамилия",
+                cabinet_title: "Личный кабинет", cabinet_new_req: "Новый запрос", cabinet_history: "История запросов"
+            },
+            en: {
+                nav_about: "About", nav_skills: "Skills", nav_projects: "Cases", btn_login: "Login", cabinet: "Dashboard",
+                hero_title: "Designing Complex Systems", hero_subtitle: "Creating intuitive interfaces, optimizing UX, and developing architecture for high-load services.",
+                about_p1: "Hi! I'm <strong>Artur Dedov</strong>. UX/UI designer and full-stack developer from Petropavl.",
+                about_p2: "2nd-year student at Kozybaev University. Combining theory with practice: from Figma wireframes to Python and C++ code.",
+                about_p3: "My passion is algorithms and DBs. I believe design is a logically built architecture.",
+                skill_design: "UX/UI Design", skill_dev: "Development", skill_db: "Architecture & DB",
+                proj_iclean: "Cleaning service interface with cost calculator.",
+                proj_yard: "City improvement system redesign. Map integration.",
+                stat_conversion: "Conversion Analytics", stat_status: "Request Status",
+                btn_discuss: "Send Request", btn_send: "Send", btn_logout: "Logout",
+                tab_login: "Log in", tab_register: "Sign up",
+                label_email: "Email", label_phone: "Phone (digits only)", label_name: "Name", label_surname: "Surname",
+                cabinet_title: "Dashboard", cabinet_new_req: "New Request", cabinet_history: "Request History"
+            },
+            kk: {
+                nav_about: "Мен туралы", nav_skills: "Дағдылар", nav_projects: "Жобалар", btn_login: "Кіру", cabinet: "Кабинет",
+                hero_title: "Күрделі жүйелерді жобалау", hero_subtitle: "Түсінікті интерфейстер жасаймын, пайдаланушы тәжірибесін оңтайландырамын.",
+                about_p1: "Сәлем! Менің атым <strong>Артур Дедов</strong>. Петропавлдан шыққан UX/UI дизайнер және full-stack әзірлеушімін.",
+                about_p2: "М. Қозыбаев атындағы СҚУ 2-курс студентімін. Figma-дан Python/C++ кодына дейін.",
+                about_p3: "Менің құмарлығым — алгоритмдер мен ДҚ. Жақсы дизайн — бұл қисынды архитектура.",
+                skill_design: "UX/UI Дизайн", skill_dev: "Әзірлеу", skill_db: "Архитектура және ДҚ",
+                proj_iclean: "Тазалау қызметінің интерфейсі және калькулятор.",
+                proj_yard: "Қаланы абаттандыру жүйесін қайта жасау.",
+                stat_conversion: "Конверсия аналитикасы", stat_status: "Өтініш мәртебесі",
+                btn_discuss: "Өтініш қалдыру", btn_send: "Жіберу", btn_logout: "Шығу",
+                tab_login: "Кіру", tab_register: "Тіркелу",
+                label_email: "Эл. пошта", label_phone: "Телефон (тек сандар)", label_name: "Аты", label_surname: "Тегі",
+                cabinet_title: "Жеке кабинет", cabinet_new_req: "Жаңа өтініш", cabinet_history: "Өтініштер тарихы"
+            }
+        };
+
+        let currentLang = 'ru';
+        const langSelect = document.getElementById('langSelect');
+
+        langSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) el.innerHTML = i18n[currentLang][key];
+            });
+            updateUIState(); // Обновить кнопки авторизации
+        });
+
+        // Инит
+        updateUIState();
+
+    </script>
+</body>
+</html>
