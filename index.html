@@ -121,10 +121,7 @@
         }
         .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* ДОБАВЛЕНО: Скрываем бургер на десктопе */
-        .burger-btn {
-            display: none; 
-        }
+        .burger-btn { display: none; }
 
         select.lang-select {
             background: var(--card-bg);
@@ -147,13 +144,13 @@
         }
         .btn-small:hover { background-color: var(--primary); color: #fff; }
 
-        /* ДОБАВЛЕНО: Стили для мобильного меню */
+        /* Мобильное меню */
         .mobile-nav {
             display: flex;
             flex-direction: column;
             background: var(--card-bg);
             position: fixed;
-            top: 75px; /* Высота хедера */
+            top: 75px; 
             left: 0;
             width: 100%;
             padding: 0 2rem;
@@ -183,13 +180,8 @@
             text-align: center;
         }
 
-        .mobile-nav a:last-child {
-            border-bottom: none;
-        }
-
-        .mobile-nav a:hover {
-            color: var(--primary);
-        }
+        .mobile-nav a:last-child { border-bottom: none; }
+        .mobile-nav a:hover { color: var(--primary); }
 
         /* Hero Section */
         .hero { max-width: 1200px; margin: 0 auto 6rem auto; text-align: center; padding-top: 4rem; }
@@ -198,37 +190,12 @@
         .section-title { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; color: var(--text-main); }
 
         /* About Section */
-        .about-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about-text {
-            flex: 1;
-        }
-
+        .about-content { display: flex; align-items: center; justify-content: space-between; gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .about-text { flex: 1; }
         .about-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; }
         .about-text strong { color: var(--primary); }
-
-        .about-image-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-
-        .profile-photo {
-            width: 100%;
-            max-width: 450px;
-            height: auto;
-            aspect-ratio: 3 / 4;
-            object-fit: cover;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
+        .about-image-container { flex: 1; display: flex; justify-content: center; }
+        .profile-photo { width: 100%; max-width: 450px; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
 
         /* Skills Section */
         .skills-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
@@ -287,81 +254,29 @@
         .history-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
         .history-item { background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; }
         .history-item span { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.3rem;}
-
         .admin-badge { background: var(--error); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; display: none; }
         
         /* Footer */
-        .site-footer {
-            max-width: 1200px;
-            margin: 4rem auto 0 auto;
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-        }
-        .footer-links {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-size: 0.95rem;
-        }
-        .footer-links a:hover {
-            color: var(--primary);
-        }
+        .site-footer { max-width: 1200px; margin: 4rem auto 0 auto; padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color); color: var(--text-muted); }
+        .footer-links { margin-top: 1rem; display: flex; justify-content: center; gap: 1.5rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--primary); }
 
         /* Стили для Toast уведомлений */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 10000;
-            pointer-events: none;
-        }
-
-        .toast {
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            font-size: 0.95rem;
-            transform: translateX(120%);
-            opacity: 0;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease;
-            pointer-events: all;
-            min-width: 250px;
-            max-width: 350px;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
+        .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 10000; pointer-events: none; }
+        .toast { background-color: var(--card-bg); color: var(--text-main); padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); font-size: 0.95rem; transform: translateX(120%); opacity: 0; transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease; pointer-events: all; min-width: 250px; max-width: 350px; }
+        .toast.show { transform: translateX(0); opacity: 1; }
         .toast.success { border-left-color: var(--success); }
         .toast.error { border-left-color: var(--error); }
         .toast.info { border-left-color: var(--primary); }
 
-        /* Адаптив - Обновлено с учетом бургера */
+        /* Адаптив */
         @media (max-width: 768px) {
             body { padding: 1rem; }
             .hero h1 { font-size: 2.2rem; }
             .projects-grid { grid-template-columns: 1fr; }
-            
-            /* Скрываем десктопное меню, показываем бургер */
             .desktop-nav { display: none; }
             .burger-btn { display: flex; }
-            
             .about-content { flex-direction: column; text-align: center; }
             .toast-container { bottom: 10px; right: 10px; left: 10px; align-items: center; }
             .toast { max-width: 100%; width: 100%; }
@@ -549,13 +464,11 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script>
-        // ДОБАВЛЕНО: Логика бургер-меню
         const burgerBtn = document.getElementById('burgerBtn');
         const mobileNav = document.getElementById('mobileNav');
 
         function toggleMobileMenu() {
             mobileNav.classList.toggle('active');
-            // Меняем иконку бургера на крестик и обратно
             if (mobileNav.classList.contains('active')) {
                 burgerBtn.innerText = '✕';
             } else {
@@ -565,29 +478,20 @@
 
         burgerBtn.addEventListener('click', toggleMobileMenu);
 
-        // Функция для вызова кастомных уведомлений
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
-            
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = message;
-            
             container.appendChild(toast);
             
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-            
+            setTimeout(() => { toast.classList.add('show'); }, 10);
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 400); 
+                setTimeout(() => { toast.remove(); }, 400); 
             }, 3500);
         }
 
-        // Анимации баров при скролле
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -601,15 +505,41 @@
         document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
 
         // ==========================================
-        // СИСТЕМА ДАННЫХ (LOCAL STORAGE)
+        // СИСТЕМА ДАННЫХ (LOCAL STORAGE - MOCK DATA)
         // ==========================================
-        if (!localStorage.getItem('appUsers')) {
+        // Ключ изменен на portfolio_db, чтобы гарантированно обновить базу у всех посетителей
+        if (!localStorage.getItem('portfolio_db')) {
+            const today = new Date();
+            const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today); twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+            const formatDate = (date) => date.toLocaleString('ru-RU');
+
             const initialDB = {
                 "admin@admin.kz": {
                     name: "Администратор", surname: "Системы", email: "admin@admin.kz", phone: "77777777777", role: "admin", history: []
+                },
+                "investor@mail.com": {
+                    name: "Алишер", surname: "Есенов", email: "investor@mail.com", phone: "77011234567", role: "user",
+                    history: [
+                        { date: formatDate(twoDaysAgo), text: "Здравствуйте, Артур. Видел ваш кейс 'Наш Двор'. Нужен похожий UX/UI дизайн для системы ЖКХ. Можем созвониться?" }
+                    ]
+                },
+                "startup.ceo@gmail.com": {
+                    name: "Диас", surname: "Нурланов", email: "startup.ceo@gmail.com", phone: "77779876543", role: "user",
+                    history: [
+                        { date: formatDate(yesterday), text: "Привет! Ищем дизайнера для проектирования дашборда в финтех-стартап. Объем работы большой." },
+                        { date: formatDate(today), text: "Отправил детали проекта вам на почту. Жду обратной связи." }
+                    ]
+                },
+                "hr.agency@yandex.kz": {
+                    name: "Айгерим", surname: "Саматова", email: "hr.agency@yandex.kz", phone: "77055554433", role: "user",
+                    history: [
+                        { date: formatDate(today), text: "Добрый день. Нас впечатлило ваше портфолио. Рассматриваете ли вы удаленную работу в продуктовой команде?" }
+                    ]
                 }
             };
-            localStorage.setItem('appUsers', JSON.stringify(initialDB));
+            localStorage.setItem('portfolio_db', JSON.stringify(initialDB));
         }
 
         let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
@@ -630,9 +560,6 @@
             }
         }
 
-        // ==========================================
-        // АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ
-        // ==========================================
         function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 
         function registerUser() {
@@ -652,14 +579,14 @@
 
             if (!isValid) return;
 
-            let users = JSON.parse(localStorage.getItem('appUsers'));
+            let users = JSON.parse(localStorage.getItem('portfolio_db'));
             if (users[email]) {
                 showToast(i18n[currentLang].err_user_exists || "Пользователь с таким email уже существует!", "error"); 
                 return;
             }
 
             users[email] = { name, surname, email, phone, role: "user", history: [] };
-            localStorage.setItem('appUsers', JSON.stringify(users));
+            localStorage.setItem('portfolio_db', JSON.stringify(users));
             
             showToast(i18n[currentLang].msg_reg_success || "Регистрация успешна! Теперь вы можете войти.", "success"); 
             switchTab('login');
@@ -668,7 +595,7 @@
         function loginUser() {
             const email = document.getElementById('loginEmail').value.trim();
             const phone = document.getElementById('loginPhone').value.trim();
-            let users = JSON.parse(localStorage.getItem('appUsers'));
+            let users = JSON.parse(localStorage.getItem('portfolio_db'));
 
             if (users[email] && users[email].phone === phone) {
                 currentUser = users[email];
@@ -678,7 +605,6 @@
                 updateUIState();
                 
                 showToast(i18n[currentLang].msg_login_success || `С возвращением, ${currentUser.name}!`, "success"); 
-                
                 openCabinet(); 
             } else {
                 document.getElementById('loginError').style.display = 'block';
@@ -693,9 +619,6 @@
             showToast(i18n[currentLang].msg_logout || "Вы вышли из аккаунта", "info"); 
         }
 
-        // ==========================================
-        // ЛИЧНЫЙ КАБИНЕТ И ИСТОРИЯ (АДМИН/ЮЗЕР)
-        // ==========================================
         function openCabinet() {
             document.getElementById('cabinetModal').classList.add('active');
             document.getElementById('cabinetUserInfo').innerText = `${currentUser.name} ${currentUser.surname} (${currentUser.email})`;
@@ -705,7 +628,7 @@
             const historyList = document.getElementById('historyList');
             historyList.innerHTML = '';
 
-            let users = JSON.parse(localStorage.getItem('appUsers'));
+            let users = JSON.parse(localStorage.getItem('portfolio_db'));
 
             if (currentUser.role === 'admin') {
                 adminBadge.style.display = 'inline-block';
@@ -754,11 +677,11 @@
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem('appUsers'));
+            let users = JSON.parse(localStorage.getItem('portfolio_db'));
             const dateStr = new Date().toLocaleString('ru-RU');
 
             users[currentUser.email].history.push({ date: dateStr, text: text });
-            localStorage.setItem('appUsers', JSON.stringify(users));
+            localStorage.setItem('portfolio_db', JSON.stringify(users));
 
             currentUser.history = users[currentUser.email].history;
             sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -768,9 +691,6 @@
             openCabinet(); 
         }
 
-        // ==========================================
-        // UI УПРАВЛЕНИЕ (ВКЛАДКИ, МОДАЛКИ)
-        // ==========================================
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -789,9 +709,6 @@
             document.getElementById('cabinetModal').classList.remove('active');
         }
 
-        // ==========================================
-        // ТЕМНАЯ / СВЕТЛАЯ ТЕМА
-        // ==========================================
         const themeToggle = document.getElementById('themeToggle');
         let currentTheme = localStorage.getItem('theme') || 'dark';
         if(currentTheme === 'light') document.body.setAttribute('data-theme', 'light');
@@ -803,9 +720,6 @@
             themeToggle.innerText = currentTheme === 'light' ? '🌙' : '☀️';
         });
 
-        // ==========================================
-        // МУЛЬТИЯЗЫЧНОСТЬ (i18n)
-        // ==========================================
         const i18n = {
             ru: {
                 nav_about: "Обо мне", nav_skills: "Навыки", nav_projects: "Кейсы", btn_login: "Войти", cabinet: "Кабинет",
@@ -884,7 +798,6 @@
             updateUIState();
         });
 
-        // Инит
         updateUIState();
 
     </script>
